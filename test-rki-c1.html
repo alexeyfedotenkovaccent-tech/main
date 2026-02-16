@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Тест по вокабуляру РКИ (C1): «Семейные отношения»</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --ok: #15803d;
+      --bad: #b91c1c;
+      --border: #e5e7eb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #eef2ff 0%, var(--bg) 180px);
+      line-height: 1.5;
+    }
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 16px 56px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 1.75rem;
+    }
+    .lead {
+      margin: 0 0 20px;
+      color: var(--muted);
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 8px 30px rgba(17, 24, 39, 0.06);
+      margin-bottom: 12px;
+    }
+    .q-title {
+      margin: 0 0 10px;
+      font-weight: 600;
+    }
+    .opts {
+      display: grid;
+      gap: 8px;
+    }
+    label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      cursor: pointer;
+      transition: .15s ease;
+      background: #fff;
+    }
+    label:hover { border-color: #c7d2fe; background: #f8faff; }
+    input[type="radio"] { margin-top: 2px; }
+    .toolbar {
+      position: sticky;
+      bottom: 0;
+      background: rgba(246, 247, 251, 0.92);
+      backdrop-filter: blur(6px);
+      border-top: 1px solid var(--border);
+      margin-top: 16px;
+      padding: 12px 0;
+    }
+    .toolbar-inner {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+    .primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .ghost {
+      background: #e5e7eb;
+      color: #111827;
+    }
+    #result {
+      margin-left: auto;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+    }
+    .ok { color: var(--ok); }
+    .bad { color: var(--bad); }
+    .explain {
+      margin-top: 8px;
+      font-size: .92rem;
+      color: var(--muted);
+    }
+    .correct-answer {
+      margin-top: 8px;
+      font-size: .9rem;
+      color: var(--ok);
+      display: none;
+    }
+    .show { display: block; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Тест по вокабуляру РКИ (C1)</h1>
+    <p class="lead">Тема: сложные семейные отношения. Выберите наиболее точный вариант для каждого пропуска. Всего 20 заданий, по 3 варианта ответа.</p>
+
+    <form id="quiz"></form>
+
+    <div class="toolbar">
+      <div class="wrap toolbar-inner">
+        <button class="primary" type="button" id="checkBtn">Проверить ответы</button>
+        <button class="ghost" type="button" id="resetBtn">Сбросить</button>
+        <div id="result"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      { s: 'Иногда мне кажется, что семья — это не дом, а ______, из которого трудно выбраться.', o: ['поле боя', 'тихая гавань', 'школьный класс'], a: 0 },
+      { s: 'Родители были настолько разными, что их ссоры стали ______ моего детства.', o: ['регулярным фоном', 'приятным развлечением', 'редким исключением'], a: 0 },
+      { s: 'Когда слышу, как кто-то резко хлопает дверью, я до сих пор невольно ______.', o: ['вздрагиваю', 'улыбаюсь', 'расслабляюсь'], a: 0 },
+      { s: 'Дед учил: если дал слово, нужно его ______, даже если это невыгодно.', o: ['держать', 'забыть', 'переделать'], a: 0 },
+      { s: 'Бабушка по отцу была женщиной жёсткой и не позволяла себе ______.', o: ['слабости', 'праздников', 'комплиментов'], a: 0 },
+      { s: 'О дедушке по отцу в семье говорили, что он просто как в воду ______.', o: ['канул', 'смотрел', 'упал'], a: 0 },
+      { s: 'Мы с младшим братом не были близки и почти не любили ______ отношения.', o: ['выяснять', 'украшать', 'ускорять'], a: 0 },
+      { s: 'Сестра в юности сбежала, потом вернулась беременной, а позже снова ______.', o: ['исчезла', 'устроилась', 'извинилась'], a: 0 },
+      { s: 'О детях дяди знали мало: связи с ними со временем как-то ______.', o: ['оборвались', 'укрепились', 'оформились'], a: 0 },
+      { s: 'Мама говорила: в каждой семье есть свои скелеты в ______.', o: ['шкафу', 'сумке', 'коридоре'], a: 0 },
+      { s: 'После встреч с дальними родственниками часто остаётся чувство, что родство — лишь ______.', o: ['формальность', 'праздник', 'подарок'], a: 0 },
+      { s: 'Некоторые родственники вспоминают о нас только когда нужно делить ______.', o: ['недвижимость', 'впечатления', 'биографии'], a: 0 },
+      { s: 'О ком-то из родни можно сказать: это уже седьмая вода на ______.', o: ['киселе', 'молоке', 'бульоне'], a: 0 },
+      { s: 'С женой у героя крепкий союз, но с его родителями она не очень ______.', o: ['ладит', 'спорит', 'прощает'], a: 0 },
+      { s: 'Иногда герой замечает, что повторяет отцовскую модель и кричит так же ______.', o: ['резко', 'мелодично', 'вежливо'], a: 0 },
+      { s: 'Фраза «яблоко от яблони недалеко падает» в тексте относится не к сыну, а к ______.', o: ['самому рассказчику', 'дяде Саше', 'племяннице'], a: 0 },
+      { s: 'Тёща описана как человек язвительный, который любит всем ______, как жить.', o: ['указывать', 'напоминать', 'одалживать'], a: 0 },
+      { s: 'С детьми брата контакт слабый, потому что стороны не могут найти ______ язык.', o: ['общий', 'научный', 'иностранный'], a: 0 },
+      { s: 'С племянницей семья помогает чем может, но по-настоящему родными быть мешает общая ______ ситуации.', o: ['запутанность', 'простота', 'предсказуемость'], a: 0 },
+      { s: 'Весь текст построен вокруг чувства, что семейная близость часто заменяется ______ хороших отношений.', o: ['видимостью', 'глубиной', 'традицией'], a: 0 }
+    ];
+
+    const quiz = document.getElementById('quiz');
+    const result = document.getElementById('result');
+
+    questions.forEach((q, i) => {
+      const card = document.createElement('section');
+      card.className = 'card';
+      card.innerHTML = `<p class="q-title">${i + 1}. ${q.s.replace('______', '<strong>______</strong>')}</p>`;
+
+      const opts = document.createElement('div');
+      opts.className = 'opts';
+
+      q.o.forEach((opt, j) => {
+        const id = `q${i}_o${j}`;
+        const label = document.createElement('label');
+        label.innerHTML = `<input id="${id}" type="radio" name="q${i}" value="${j}"><span>${opt}</span>`;
+        opts.appendChild(label);
+      });
+
+      const expl = document.createElement('div');
+      expl.className = 'correct-answer';
+      expl.textContent = `Правильный ответ: ${q.o[q.a]}`;
+
+      card.appendChild(opts);
+      card.appendChild(expl);
+      quiz.appendChild(card);
+    });
+
+    document.getElementById('checkBtn').addEventListener('click', () => {
+      let score = 0;
+      const cards = [...document.querySelectorAll('.card')];
+      cards.forEach((card, i) => {
+        const chosen = quiz.querySelector(`input[name="q${i}"]:checked`);
+        const labels = [...card.querySelectorAll('label')];
+        labels.forEach(l => { l.style.borderColor = 'var(--border)'; l.style.background = '#fff'; });
+
+        if (chosen && Number(chosen.value) === questions[i].a) {
+          score++;
+          chosen.closest('label').style.borderColor = 'var(--ok)';
+          chosen.closest('label').style.background = '#f0fdf4';
+        } else {
+          if (chosen) {
+            chosen.closest('label').style.borderColor = 'var(--bad)';
+            chosen.closest('label').style.background = '#fef2f2';
+          }
+          const correct = card.querySelector(`input[name="q${i}"][value="${questions[i].a}"]`);
+          if (correct) {
+            correct.closest('label').style.borderColor = 'var(--ok)';
+            correct.closest('label').style.background = '#f0fdf4';
+          }
+        }
+
+        card.querySelector('.correct-answer').classList.add('show');
+      });
+
+      const percent = Math.round((score / questions.length) * 100);
+      const cls = percent >= 80 ? 'ok' : 'bad';
+      result.className = cls;
+      result.textContent = `Результат: ${score}/${questions.length} (${percent}%)`;
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      quiz.reset();
+      result.className = '';
+      result.textContent = '';
+      document.querySelectorAll('label').forEach(l => {
+        l.style.borderColor = 'var(--border)';
+        l.style.background = '#fff';
+      });
+      document.querySelectorAll('.correct-answer').forEach(el => el.classList.remove('show'));
+    });
+  </script>
+</body>
+</html>
